@@ -43,6 +43,36 @@ const venueData = [
     websiteUrl: "https://www.southbankcentre.co.uk",
     area: "South",
   },
+  {
+    name: "National Gallery",
+    slug: "national-gallery",
+    websiteUrl: "https://www.nationalgallery.org.uk",
+    area: "Central",
+  },
+  {
+    name: "Design Museum",
+    slug: "design-museum",
+    websiteUrl: "https://designmuseum.org",
+    area: "West",
+  },
+  {
+    name: "Whitechapel Gallery",
+    slug: "whitechapel-gallery",
+    websiteUrl: "https://www.whitechapelgallery.org",
+    area: "East",
+  },
+  {
+    name: "Somerset House",
+    slug: "somerset-house",
+    websiteUrl: "https://www.somersethouse.org.uk",
+    area: "Central",
+  },
+  {
+    name: "Serpentine Galleries",
+    slug: "serpentine-galleries",
+    websiteUrl: "https://www.serpentinegalleries.org",
+    area: "Central",
+  },
 ];
 
 const eventsByVenue: Record<

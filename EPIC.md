@@ -200,6 +200,35 @@ London has hundreds of art and creative events happening weekly across galleries
 - Ticket purchasing — out of scope (link to source only)
 - Social features — out of scope
 
+## Future Ideas (Backlog)
+
+### Venues
+- Add more venue scrapers: Serpentine, Hayward Gallery, National Gallery, Design Museum, Saatchi, Whitechapel Gallery, Royal Academy, Somerset House
+- Southbank Centre via Skiddle API (free key needed from https://www.skiddle.com/api/join.php)
+
+### Features
+- **PWA / Mobile app** — offline support, install prompt, push notifications
+- **Email alerts** — weekly digest of new events matching user preferences
+- **Map view** — events plotted on a London map (Mapbox/Leaflet)
+- **Favourites / save events** — local storage or with user accounts
+- **Calendar integration** — "Add to Google Calendar / iCal" button per event
+- **Similar events** — "you might also like" recommendations
+- **Event reminders** — notify before an event starts
+- **Social sharing** — share buttons, OG image generation
+
+### Design & SEO
+- Custom branding, logo, colour palette
+- OG images per event (dynamic generation)
+- sitemap.xml generation
+- JSON-LD structured data (Event schema) for Google rich results
+- Lighthouse score optimisation (target 90+)
+
+### Infrastructure
+- GitHub Actions secrets setup (DATABASE_URL, VERCEL_DEPLOY_URL, VERCEL_REVALIDATE_TOKEN)
+- Scraper health monitoring / alerting when a venue scraper breaks
+- Image caching (download venue images to own storage vs hotlinking)
+- Analytics (Plausible / Umami — privacy-friendly, free self-hosted)
+
 ### Open Questions
 - Exact list of launch venues beyond the big 4 (Barbican, V&A, Tate, Southbank)
 - Image handling: hotlink to venue images vs. download and host (copyright implications)

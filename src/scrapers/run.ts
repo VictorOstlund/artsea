@@ -3,6 +3,11 @@ import { barbicanScraper } from "./venues/barbican";
 import { vandaScraper } from "./venues/vanda";
 import { tateScraper } from "./venues/tate";
 import { southbankScraper } from "./venues/southbank";
+import { nationalGalleryScraper } from "./venues/national-gallery";
+import { designMuseumScraper } from "./venues/design-museum";
+import { whitechapelScraper } from "./venues/whitechapel";
+import { somersetHouseScraper } from "./venues/somerset-house";
+import { serpentineScraper } from "./venues/serpentine";
 import { upsertEvents } from "./lib/db";
 import type { VenueScraper } from "./lib/types";
 
@@ -11,6 +16,11 @@ const scrapers: VenueScraper[] = [
   vandaScraper,
   tateScraper,
   southbankScraper,
+  nationalGalleryScraper,
+  designMuseumScraper,
+  whitechapelScraper,
+  somersetHouseScraper,
+  serpentineScraper,
 ];
 
 async function main() {

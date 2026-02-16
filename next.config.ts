@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.tate.org.uk" },
       { protocol: "https", hostname: "**.barbican.org.uk" },
       { protocol: "https", hostname: "**.southbankcentre.co.uk" },
+      { protocol: "https", hostname: "**.nationalgallery.org.uk" },
+      { protocol: "https", hostname: "designmuseum.org" },
+      { protocol: "https", hostname: "**.whitechapelgallery.org" },
+      { protocol: "https", hostname: "**.somersethouse.org.uk" },
+      { protocol: "https", hostname: "**.serpentinegalleries.org" },
+      { protocol: "https", hostname: "d37zoqglehb9o7.cloudfront.net" },
     ],
   },
 };
