@@ -12,16 +12,23 @@ https://github.com/VictorOstlund/artsea
 - Next.js 16 project with TypeScript, Tailwind CSS, App Router
 - Neon Postgres database (eu-west-2 London) with Drizzle ORM
 - Database schema: venues + events tables with full-text search GIN index
-- 228 real scraped events across 3 venues (Barbican, V&A, Tate Modern)
+- ~436 real scraped events across 9 active venues
 - Home page: chronological event feed with responsive 3-column grid
 - Event detail page (/events/[slug]) with dynamic metadata
 - Venue page (/venues/[slug]) with event listings
 - About page with attribution
 - FilterBar: event type, date range, area, venue (combinable, URL-based)
 - Full-text search using Postgres ts_vector + plainto_tsquery
-- Scrapers: Barbican (66 events), V&A (150 events), Tate Modern (15 events)
-- V&A scraper: dataLayer extraction enriched with HTML images
-- Barbican scraper: Drupal Views .views-row + data-day + pagination
+- Scrapers (9 venues):
+  - Barbican Centre (66 events) — Drupal Views .views-row + data-day + pagination
+  - V&A Museum (150 events) — dataLayer extraction enriched with HTML images
+  - Tate Modern (15 events) — static HTML cards
+  - National Gallery (134 events) — exhibitions HTML + AJAX events endpoint (/umbraco/Surface/Events/EventsCards)
+  - Design Museum (8 events) — static HTML, CSS background-image in figure style
+  - Whitechapel Gallery (11 events) — WordPress exhibitions + events pages
+  - Somerset House (12 events) — embedded GraphQL JSON in script tags
+  - Serpentine Galleries (14 events) — WordPress with link[rel=next] pagination
+  - Saatchi Gallery (20 events) — WordPress REST API (/wp-json/wp/v2/exhibitions)
 - next/image with remotePatterns for all venue CDNs (proxies through Vercel)
 - GitHub Actions workflow: daily cron at 3 AM UTC
 - Revalidation API route for cache busting after scrape
@@ -31,10 +38,21 @@ https://github.com/VictorOstlund/artsea
 - Deployed on Vercel (auto-deploy from GitHub)
 - GitHub repo with gh CLI authenticated
 
-## Not Working
-- Southbank Centre: Cloudflare protection blocks all automated access
-  - Best option: Skiddle API (free key) — https://www.skiddle.com/api/join.php
-  - Alternative: Playwright headless browser (heavy dependency)
+## Blocked Venues (Can't Scrape with Cheerio)
+
+### Southbank Centre / Hayward Gallery
+- **Problem**: Cloudflare JS challenge blocks all automated access (403)
+- **Options**:
+  1. **Skiddle API** (best) — free key from https://www.skiddle.com/api/join.php, covers Southbank + Hayward
+  2. **Playwright headless browser** — can solve JS challenges, but heavy dependency for GitHub Actions
+  3. **Manual data entry** — small number of exhibitions, could maintain by hand
+
+### Royal Academy of Arts
+- **Problem**: Cloudflare JS challenge on all endpoints including /api/ and /graphql (403)
+- **Options**:
+  1. **Playwright headless browser** — only option to solve Cloudflare challenges
+  2. **TimeOut/external aggregator** — scrape event data from listing sites instead
+  3. **Manual data entry** — small number of major exhibitions
 
 ## Architecture
 ```
@@ -63,3 +81,6 @@ CI/CD: GitHub Actions (daily scrape) + Vercel (auto-deploy)
 - next/image proxies through Vercel, solving venue hotlinking blocks
 - Vercel CLI scope issues in non-interactive environments — use web dashboard instead
 - GitHub OAuth needs `workflow` scope to push .github/workflows files
+- Saatchi Gallery HTML is JS-rendered but WP REST API is wide open (/wp-json/wp/v2/exhibitions)
+- Royal Academy is fully Cloudflare-protected — even /api/ and /graphql endpoints return 403
+- WP REST API `title.rendered` contains HTML entities (&#8211; etc.) — decode after stripping tags

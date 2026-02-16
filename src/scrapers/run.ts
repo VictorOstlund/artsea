@@ -8,6 +8,7 @@ import { designMuseumScraper } from "./venues/design-museum";
 import { whitechapelScraper } from "./venues/whitechapel";
 import { somersetHouseScraper } from "./venues/somerset-house";
 import { serpentineScraper } from "./venues/serpentine";
+import { saatchiScraper } from "./venues/saatchi";
 import { upsertEvents } from "./lib/db";
 import type { VenueScraper } from "./lib/types";
 
@@ -21,6 +22,7 @@ const scrapers: VenueScraper[] = [
   whitechapelScraper,
   somersetHouseScraper,
   serpentineScraper,
+  saatchiScraper,
 ];
 
 async function main() {

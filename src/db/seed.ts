@@ -73,6 +73,12 @@ const venueData = [
     websiteUrl: "https://www.serpentinegalleries.org",
     area: "Central",
   },
+  {
+    name: "Saatchi Gallery",
+    slug: "saatchi-gallery",
+    websiteUrl: "https://www.saatchigallery.com",
+    area: "Central",
+  },
 ];
 
 const eventsByVenue: Record<
