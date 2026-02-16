@@ -34,6 +34,7 @@ export const events = pgTable(
     imageUrl: text("image_url"),
     sourceUrl: text("source_url").notNull(),
     isFree: boolean("is_free"),
+    isSoldOut: boolean("is_sold_out"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
     sourceHash: text("source_hash").notNull(),

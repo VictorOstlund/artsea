@@ -90,6 +90,7 @@ async function getFilteredEvents(searchParams: {
       imageUrl: events.imageUrl,
       sourceUrl: events.sourceUrl,
       isFree: events.isFree,
+      isSoldOut: events.isSoldOut,
       venueName: venues.name,
       venueSlug: venues.slug,
     })
@@ -157,6 +158,7 @@ export default async function Home({ searchParams }: Props) {
               slug={event.slug}
               sourceUrl={event.sourceUrl}
               isFree={event.isFree}
+              isSoldOut={event.isSoldOut}
             />
           ))}
         </div>

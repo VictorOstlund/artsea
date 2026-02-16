@@ -44,6 +44,7 @@ async function getEvent(slug: string) {
       imageUrl: events.imageUrl,
       sourceUrl: events.sourceUrl,
       isFree: events.isFree,
+      isSoldOut: events.isSoldOut,
       venueName: venues.name,
       venueSlug: venues.slug,
       venueArea: venues.area,
@@ -119,6 +120,11 @@ export default async function EventPage({ params }: Props) {
         <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
           {typeLabel}
         </span>
+        {event.isSoldOut === true && (
+          <span className="rounded-full bg-gray-800 px-3 py-1 text-xs font-medium text-white">
+            Sold Out
+          </span>
+        )}
         {event.isFree === true && (
           <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
             Free

@@ -80,6 +80,7 @@ export async function upsertEvents(
             imageUrl: event.imageUrl,
             sourceUrl: event.sourceUrl,
             isFree: event.isFree,
+            isSoldOut: event.isSoldOut,
             updatedAt: new Date(),
           })
           .where(eq(schema.events.id, existing[0].id));
@@ -104,6 +105,7 @@ export async function upsertEvents(
           imageUrl: event.imageUrl,
           sourceUrl: event.sourceUrl,
           isFree: event.isFree,
+          isSoldOut: event.isSoldOut,
           sourceHash,
         });
         inserted++;

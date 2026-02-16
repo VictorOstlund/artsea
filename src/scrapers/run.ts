@@ -2,7 +2,11 @@ import "dotenv/config";
 import { barbicanScraper } from "./venues/barbican";
 import { vandaScraper } from "./venues/vanda";
 import { tateScraper } from "./venues/tate";
-import { southbankScraper } from "./venues/southbank";
+import {
+  haywardScraper,
+  royalAcademyScraper,
+  southbankTimeoutScraper,
+} from "./venues/timeout-venue";
 import { nationalGalleryScraper } from "./venues/national-gallery";
 import { designMuseumScraper } from "./venues/design-museum";
 import { whitechapelScraper } from "./venues/whitechapel";
@@ -16,7 +20,9 @@ const scrapers: VenueScraper[] = [
   barbicanScraper,
   vandaScraper,
   tateScraper,
-  southbankScraper,
+  southbankTimeoutScraper,
+  haywardScraper,
+  royalAcademyScraper,
   nationalGalleryScraper,
   designMuseumScraper,
   whitechapelScraper,

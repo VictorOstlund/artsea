@@ -79,6 +79,18 @@ const venueData = [
     websiteUrl: "https://www.saatchigallery.com",
     area: "Central",
   },
+  {
+    name: "Hayward Gallery",
+    slug: "hayward-gallery",
+    websiteUrl: "https://www.southbankcentre.co.uk/venues/hayward-gallery",
+    area: "South",
+  },
+  {
+    name: "Royal Academy of Arts",
+    slug: "royal-academy",
+    websiteUrl: "https://www.royalacademy.org.uk",
+    area: "Central",
+  },
 ];
 
 const eventsByVenue: Record<

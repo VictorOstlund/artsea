@@ -106,6 +106,7 @@ export const tateScraper: VenueScraper = {
               : null,
           sourceUrl,
           isFree,
+          isSoldOut: null,
         });
       });
 

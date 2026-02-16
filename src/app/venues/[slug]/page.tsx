@@ -29,6 +29,7 @@ async function getVenueEvents(venueId: string) {
       imageUrl: events.imageUrl,
       sourceUrl: events.sourceUrl,
       isFree: events.isFree,
+      isSoldOut: events.isSoldOut,
     })
     .from(events)
     .where(eq(events.venueId, venueId))
@@ -120,6 +121,7 @@ export default async function VenuePage({ params }: Props) {
               slug={event.slug}
               sourceUrl={event.sourceUrl}
               isFree={event.isFree}
+              isSoldOut={event.isSoldOut}
             />
           ))}
         </div>

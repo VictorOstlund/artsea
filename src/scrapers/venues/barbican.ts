@@ -112,6 +112,7 @@ export const barbicanScraper: VenueScraper = {
             imageUrl,
             sourceUrl,
             isFree: isFree || null,
+            isSoldOut: null,
           });
         });
 

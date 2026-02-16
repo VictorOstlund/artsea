@@ -87,6 +87,7 @@ export const whitechapelScraper: VenueScraper = {
           imageUrl,
           sourceUrl,
           isFree: null,
+          isSoldOut: null,
         });
       });
 
@@ -125,6 +126,7 @@ export const whitechapelScraper: VenueScraper = {
           imageUrl,
           sourceUrl,
           isFree: null,
+          isSoldOut: null,
         });
       });
     } catch (error) {

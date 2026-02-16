@@ -77,6 +77,7 @@ export const saatchiScraper: VenueScraper = {
           imageUrl,
           sourceUrl,
           isFree: null,
+          isSoldOut: null,
         });
       }
     } catch (error) {

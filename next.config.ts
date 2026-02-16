@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.serpentinegalleries.org" },
       { protocol: "https", hostname: "d37zoqglehb9o7.cloudfront.net" },
       { protocol: "https", hostname: "**.saatchigallery.com" },
+      { protocol: "https", hostname: "media.timeout.com" },
     ],
   },
 };

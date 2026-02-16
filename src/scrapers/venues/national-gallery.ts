@@ -104,6 +104,7 @@ export const nationalGalleryScraper: VenueScraper = {
           imageUrl,
           sourceUrl,
           isFree,
+          isSoldOut: null,
         });
       });
 
@@ -148,6 +149,7 @@ export const nationalGalleryScraper: VenueScraper = {
           imageUrl,
           sourceUrl,
           isFree,
+          isSoldOut: null,
         });
       });
     } catch (error) {

@@ -109,6 +109,7 @@ export const serpentineScraper: VenueScraper = {
             imageUrl,
             sourceUrl,
             isFree: null,
+            isSoldOut: null,
           });
         });
 

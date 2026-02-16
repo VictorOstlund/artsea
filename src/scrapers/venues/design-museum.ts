@@ -113,6 +113,7 @@ export const designMuseumScraper: VenueScraper = {
           imageUrl,
           sourceUrl,
           isFree,
+          isSoldOut: null,
         });
       });
     } catch (error) {

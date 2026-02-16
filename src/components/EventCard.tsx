@@ -60,6 +60,7 @@ interface EventCardProps {
   slug: string;
   sourceUrl: string;
   isFree: boolean | null;
+  isSoldOut: boolean | null;
 }
 
 export function EventCard({
@@ -71,14 +72,17 @@ export function EventCard({
   imageUrl,
   slug,
   isFree,
+  isSoldOut,
 }: EventCardProps) {
   const typeColor = EVENT_TYPE_COLORS[eventType] || "bg-gray-100 text-gray-700";
   const typeLabel = EVENT_TYPE_LABELS[eventType] || eventType;
 
+  const soldOut = isSoldOut === true;
+
   return (
     <Link
       href={`/events/${slug}`}
-      className="group block overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-gray-200 transition-shadow hover:shadow-md"
+      className={`group block overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-gray-200 transition-shadow hover:shadow-md ${soldOut ? "opacity-60 grayscale-[30%]" : ""}`}
     >
       {/* Image area */}
       <div className="aspect-[16/9] bg-gray-100 relative">
@@ -113,11 +117,15 @@ export function EventCard({
         >
           {typeLabel}
         </span>
-        {isFree === true && (
+        {soldOut ? (
+          <span className="absolute top-3 right-3 rounded-full bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-white">
+            Sold Out
+          </span>
+        ) : isFree === true ? (
           <span className="absolute top-3 right-3 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
             Free
           </span>
-        )}
+        ) : null}
       </div>
 
       {/* Content */}

@@ -83,6 +83,7 @@ export const vandaScraper: VenueScraper = {
                   imageUrl: null,
                   sourceUrl: `${BASE_URL}/event/${item.id}`,
                   isFree: null,
+                  isSoldOut: null,
                 });
               }
             }
@@ -102,6 +103,7 @@ export const vandaScraper: VenueScraper = {
             dateText: string;
             description: string;
             isFree: boolean | null;
+            isSoldOut: boolean | null;
           }
         >();
         $(
@@ -129,8 +131,12 @@ export const vandaScraper: VenueScraper = {
             .trim();
           const desc =
             $el.find("[class*='description'], p").first().text().trim() || "";
-          const isFreeText = $el.text().toLowerCase();
-          const isFree = isFreeText.includes("free") ? true : null;
+          const cardText = $el.text().toLowerCase();
+          const isFree = cardText.includes("free") ? true : null;
+          const isSoldOut =
+            cardText.includes("sold out") || cardText.includes("fully booked")
+              ? true
+              : null;
           if (href) {
             const fullHref = href.startsWith("http")
               ? href
@@ -140,6 +146,7 @@ export const vandaScraper: VenueScraper = {
               dateText,
               description: desc,
               isFree,
+              isSoldOut,
             });
           }
         });
@@ -157,6 +164,7 @@ export const vandaScraper: VenueScraper = {
               if (endDate) event.endDate = endDate;
             }
             if (html.isFree !== null) event.isFree = html.isFree;
+            if (html.isSoldOut !== null) event.isSoldOut = html.isSoldOut;
           }
         }
       }
@@ -188,8 +196,12 @@ export const vandaScraper: VenueScraper = {
             ? href
             : `${BASE_URL}${href}`;
 
-          const isFreeText = $el.text().toLowerCase();
-          const isFree = isFreeText.includes("free") ? true : null;
+          const cardText = $el.text().toLowerCase();
+          const isFree = cardText.includes("free") ? true : null;
+          const isSoldOut =
+            cardText.includes("sold out") || cardText.includes("fully booked")
+              ? true
+              : null;
 
           if (startDate || !dateText) {
             events.push({
@@ -207,6 +219,7 @@ export const vandaScraper: VenueScraper = {
                     : null,
               sourceUrl,
               isFree,
+              isSoldOut,
             });
           }
         });

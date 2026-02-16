@@ -42,6 +42,7 @@ describe("EventCard", () => {
     slug: "test-exhibition",
     sourceUrl: "https://example.com/event",
     isFree: null,
+    isSoldOut: null,
   };
 
   it("renders event title", () => {
@@ -96,6 +97,25 @@ describe("EventCard", () => {
     expect(img.getAttribute("src")).toContain(
       "https%3A%2F%2Fexample.com%2Fimg.jpg",
     );
+  });
+
+  it("renders Sold Out badge when isSoldOut is true", () => {
+    render(<EventCard {...defaultProps} isSoldOut={true} />);
+    expect(screen.getByText("Sold Out")).toBeInTheDocument();
+  });
+
+  it("applies reduced opacity when sold out", () => {
+    const { container } = render(
+      <EventCard {...defaultProps} isSoldOut={true} />,
+    );
+    const link = container.querySelector("a");
+    expect(link?.className).toContain("opacity-60");
+  });
+
+  it("does not show Free badge when sold out", () => {
+    render(<EventCard {...defaultProps} isFree={true} isSoldOut={true} />);
+    expect(screen.getByText("Sold Out")).toBeInTheDocument();
+    expect(screen.queryByText("Free")).not.toBeInTheDocument();
   });
 
   it("handles unknown event type gracefully", () => {

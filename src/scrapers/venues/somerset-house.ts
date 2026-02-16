@@ -147,6 +147,7 @@ export const somersetHouseScraper: VenueScraper = {
           imageUrl: node.listingImage?.src || null,
           sourceUrl,
           isFree: node.priceFree === true ? true : null,
+          isSoldOut: null,
         });
       }
 
@@ -175,6 +176,7 @@ export const somersetHouseScraper: VenueScraper = {
             imageUrl: null,
             sourceUrl,
             isFree: null,
+            isSoldOut: null,
           });
         });
       }

@@ -7,6 +7,7 @@ export interface ScrapedEvent {
   imageUrl: string | null;
   sourceUrl: string;
   isFree: boolean | null;
+  isSoldOut: boolean | null;
 }
 
 export interface VenueScraper {
