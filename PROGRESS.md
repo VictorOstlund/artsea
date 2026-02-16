@@ -12,7 +12,7 @@ https://github.com/VictorOstlund/artsea
 - Next.js 16 project with TypeScript, Tailwind CSS, App Router
 - Neon Postgres database (eu-west-2 London) with Drizzle ORM
 - Database schema: venues + events tables with full-text search GIN index
-- ~436 real scraped events across 9 active venues
+- ~445 real scraped events across 12 active venues
 - Home page: chronological event feed with responsive 3-column grid
 - Event detail page (/events/[slug]) with dynamic metadata
 - Venue page (/venues/[slug]) with event listings
@@ -29,30 +29,24 @@ https://github.com/VictorOstlund/artsea
   - Somerset House (12 events) — embedded GraphQL JSON in script tags
   - Serpentine Galleries (14 events) — WordPress with link[rel=next] pagination
   - Saatchi Gallery (20 events) — WordPress REST API (/wp-json/wp/v2/exhibitions)
+  - Hayward Gallery (2 events) — via TimeOut London (Cloudflare blocks direct access)
+  - Royal Academy (3 events) — via TimeOut London (Cloudflare blocks direct access)
+  - Southbank Centre (4 events) — via TimeOut London (Cloudflare blocks direct access)
+- Sold-out status: isSoldOut boolean column, V&A detects "sold out" / "fully booked"
+- EventCard shows "Sold Out" badge with reduced opacity + grayscale
 - next/image with remotePatterns for all venue CDNs (proxies through Vercel)
 - GitHub Actions workflow: daily cron at 3 AM UTC
 - Revalidation API route for cache busting after scrape
-- 24 tests passing (EventCard rendering, date formatting, scraper utils)
+- 27 tests passing (EventCard rendering, date formatting, scraper utils, sold-out behavior)
 - Pre-commit hooks: Husky + lint-staged (ESLint + Prettier)
 - Clean minimal design (gallery aesthetic)
 - Deployed on Vercel (auto-deploy from GitHub)
 - GitHub repo with gh CLI authenticated
 
-## Blocked Venues (Can't Scrape with Cheerio)
-
-### Southbank Centre / Hayward Gallery
-- **Problem**: Cloudflare JS challenge blocks all automated access (403)
-- **Options**:
-  1. **Skiddle API** (best) — free key from https://www.skiddle.com/api/join.php, covers Southbank + Hayward
-  2. **Playwright headless browser** — can solve JS challenges, but heavy dependency for GitHub Actions
-  3. **Manual data entry** — small number of exhibitions, could maintain by hand
-
-### Royal Academy of Arts
-- **Problem**: Cloudflare JS challenge on all endpoints including /api/ and /graphql (403)
-- **Options**:
-  1. **Playwright headless browser** — only option to solve Cloudflare challenges
-  2. **TimeOut/external aggregator** — scrape event data from listing sites instead
-  3. **Manual data entry** — small number of major exhibitions
+## Previously Blocked Venues (Now Resolved via TimeOut)
+- Southbank Centre, Hayward Gallery, Royal Academy — all Cloudflare-protected
+- Solved by scraping TimeOut London venue pages (legal, public data)
+- TimeOut uses stable `data-testid` selectors and `<time>` elements with ISO dates
 
 ## Architecture
 ```
@@ -84,3 +78,5 @@ CI/CD: GitHub Actions (daily scrape) + Vercel (auto-deploy)
 - Saatchi Gallery HTML is JS-rendered but WP REST API is wide open (/wp-json/wp/v2/exhibitions)
 - Royal Academy is fully Cloudflare-protected — even /api/ and /graphql endpoints return 403
 - WP REST API `title.rendered` contains HTML entities (&#8211; etc.) — decode after stripping tags
+- TimeOut London uses `data-testid` attributes (stable vs hashed CSS classes) for scraping
+- TimeOut `<time>` elements have ISO 8601 dateTime attributes — reliable date extraction
