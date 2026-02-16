@@ -5,43 +5,26 @@ import type { ScrapedEvent, VenueScraper } from "../lib/types";
 const BASE_URL = "https://www.barbican.org.uk";
 const WHATS_ON_URL = `${BASE_URL}/whats-on`;
 
-function parseDate(dateStr: string): string | null {
-  try {
-    const cleaned = dateStr.trim();
-    const date = new Date(cleaned);
-    if (isNaN(date.getTime())) return null;
-    return date.toISOString().split("T")[0];
-  } catch {
-    return null;
-  }
-}
+function parseDayAttr(dayStr: string): string {
+  // data-day format: "Mon 16 Feb" (no year) — assume current or next occurrence
+  const match = dayStr.match(/\w+\s+(\d{1,2})\s+(\w+)/);
+  if (!match) return new Date().toISOString().split("T")[0];
 
-function parseDateRange(text: string): {
-  startDate: string | null;
-  endDate: string | null;
-} {
-  // Common formats: "15 Mar 2026", "15 Mar - 20 Jun 2026", "15 Mar 2026 - 20 Jun 2026"
-  const rangeMatch = text.match(
-    /(\d{1,2}\s+\w+(?:\s+\d{4})?)\s*[-–—]\s*(\d{1,2}\s+\w+\s+\d{4})/,
-  );
-  if (rangeMatch) {
-    let startStr = rangeMatch[1];
-    const endStr = rangeMatch[2];
-    // If start date has no year, infer from end date
-    if (!/\d{4}/.test(startStr)) {
-      const yearMatch = endStr.match(/\d{4}/);
-      if (yearMatch) startStr += ` ${yearMatch[0]}`;
-    }
-    return { startDate: parseDate(startStr), endDate: parseDate(endStr) };
-  }
+  const day = match[1];
+  const monthStr = match[2];
+  const now = new Date();
+  const year = now.getFullYear();
+  const todayStr = now.toISOString().split("T")[0];
 
-  // Single date
-  const singleMatch = text.match(/(\d{1,2}\s+\w+\s+\d{4})/);
-  if (singleMatch) {
-    return { startDate: parseDate(singleMatch[1]), endDate: null };
-  }
+  // Try current year first, if date is in the past use next year
+  const attempt = new Date(`${day} ${monthStr} ${year}`);
+  if (isNaN(attempt.getTime())) return todayStr;
 
-  return { startDate: null, endDate: null };
+  const attemptStr = attempt.toISOString().split("T")[0];
+  if (attemptStr < todayStr) {
+    attempt.setFullYear(year + 1);
+  }
+  return attempt.toISOString().split("T")[0];
 }
 
 export const barbicanScraper: VenueScraper = {
@@ -50,63 +33,95 @@ export const barbicanScraper: VenueScraper = {
   async scrape(): Promise<ScrapedEvent[]> {
     console.log("Scraping Barbican Centre...");
     const events: ScrapedEvent[] = [];
+    const seen = new Set<string>();
 
     try {
-      const html = await fetchPage(WHATS_ON_URL);
-      const $ = cheerio.load(html);
+      // Fetch multiple pages (pagination is ?page=N, 0-indexed)
+      for (let page = 0; page < 5; page++) {
+        const url = page === 0 ? WHATS_ON_URL : `${WHATS_ON_URL}?page=${page}`;
+        let html: string;
+        try {
+          html = await fetchPage(url);
+        } catch {
+          break; // No more pages
+        }
+        const $ = cheerio.load(html);
 
-      // Find event links/cards on the page
-      $("a[href*='/whats-on/']").each((_i, el) => {
-        const $el = $(el);
-        const href = $el.attr("href");
-        if (!href || href === "/whats-on" || href === "/whats-on/") return;
+        const rows = $(".views-row");
+        if (rows.length === 0) break;
 
-        const title =
-          $el.find("h2, h3, .title, [class*='title']").first().text().trim() ||
-          $el.text().trim().split("\n")[0]?.trim();
-        if (!title || title.length < 3) return;
+        rows.each((_i, row) => {
+          const $row = $(row);
+          const $card = $row.find(".search-listing--event");
+          if ($card.length === 0) return;
 
-        const dateText =
-          $el.find("[class*='date'], time, .subtitle").text().trim() ||
-          $el.find("p").first().text().trim();
-        const { startDate, endDate } = parseDateRange(dateText);
-
-        const description =
-          $el
-            .find("[class*='description'], [class*='summary'], p")
-            .last()
+          // Title
+          const title = $card
+            .find("h2.listing-title, .listing-title--event")
+            .first()
             .text()
-            .trim() || "";
+            .trim();
+          if (!title || title.length < 3) return;
 
-        const imageUrl =
-          $el.find("img").attr("src") ||
-          $el.find("img").attr("data-src") ||
-          null;
+          // URL
+          const href =
+            $card.find("a.search-listing__link").attr("href") ||
+            $card.find(".search-listing__cta a").attr("href");
+          if (!href) return;
+          const sourceUrl = href.startsWith("http")
+            ? href
+            : `${BASE_URL}${href}`;
 
-        const sourceUrl = href.startsWith("http") ? href : `${BASE_URL}${href}`;
+          // Deduplicate
+          if (seen.has(sourceUrl)) return;
+          seen.add(sourceUrl);
 
-        const isFreeText = $el.text().toLowerCase();
-        const isFree = isFreeText.includes("free") ? true : null;
+          // Date from parent row's data-day attribute
+          const dayAttr = $row.attr("data-day") || "";
+          const startDate = parseDayAttr(dayAttr);
 
-        if (startDate) {
+          // Image
+          const imgEl = $card.find(".search-listing__image img");
+          let imageUrl = imgEl.attr("src") || imgEl.attr("data-src") || null;
+          if (imageUrl && !imageUrl.startsWith("http")) {
+            imageUrl = `${BASE_URL}${imageUrl}`;
+          }
+
+          // Tags / categories
+          const tags = $card
+            .find(".tag__plain")
+            .map((_i, el) => $(el).text().trim())
+            .get();
+
+          // Free?
+          const isFree =
+            $card.find(".search-listing__label--promoted").length > 0;
+
+          // Description
+          const description = $card
+            .find(".search-listing__intro p")
+            .text()
+            .trim();
+
           events.push({
             title: title.slice(0, 200),
-            description: description.slice(0, 500),
-            eventType: inferEventType(title, description),
+            description: (description || "").slice(0, 500),
+            eventType: inferEventType(title, description || "", tags.join(" ")),
             startDate,
-            endDate,
-            imageUrl: imageUrl?.startsWith("http")
-              ? imageUrl
-              : imageUrl
-                ? `${BASE_URL}${imageUrl}`
-                : null,
+            endDate: null,
+            imageUrl,
             sourceUrl,
-            isFree,
+            isFree: isFree || null,
           });
-        }
-      });
+        });
 
-      await delay();
+        // Check if there's a next page
+        const hasNext =
+          $("ul[data-drupal-views-infinite-scroll-pager] a").length > 0;
+        if (!hasNext) break;
+
+        await delay();
+      }
     } catch (error) {
       console.error("Error scraping Barbican:", error);
     }

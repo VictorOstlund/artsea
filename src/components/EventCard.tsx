@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 import Link from "next/link";
 
 const EVENT_TYPE_COLORS: Record<string, string> = {
@@ -83,10 +83,12 @@ export function EventCard({
       {/* Image area */}
       <div className="aspect-[16/9] bg-gray-100 relative">
         {imageUrl ? (
-          <img
+          <Image
             src={imageUrl}
             alt={title}
-            className="h-full w-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-gray-300">

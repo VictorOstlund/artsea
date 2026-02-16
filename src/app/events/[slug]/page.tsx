@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { events, venues } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -102,12 +103,14 @@ export default async function EventPage({ params }: Props) {
       </Link>
 
       {event.imageUrl && (
-        <div className="aspect-[16/9] overflow-hidden rounded-lg bg-gray-100 mb-6">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+        <div className="aspect-[16/9] overflow-hidden rounded-lg bg-gray-100 mb-6 relative">
+          <Image
             src={event.imageUrl}
             alt={event.title}
-            className="h-full w-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 672px"
+            priority
           />
         </div>
       )}

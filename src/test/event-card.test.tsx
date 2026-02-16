@@ -93,7 +93,9 @@ describe("EventCard", () => {
       <EventCard {...defaultProps} imageUrl="https://example.com/img.jpg" />,
     );
     const img = screen.getByAltText("Test Exhibition");
-    expect(img).toHaveAttribute("src", "https://example.com/img.jpg");
+    expect(img.getAttribute("src")).toContain(
+      "https%3A%2F%2Fexample.com%2Fimg.jpg",
+    );
   });
 
   it("handles unknown event type gracefully", () => {

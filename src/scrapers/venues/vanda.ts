@@ -92,7 +92,76 @@ export const vandaScraper: VenueScraper = {
         }
       }
 
-      // HTML fallback: find event cards
+      // Enrich dataLayer events with images and details from HTML
+      if (events.length > 0) {
+        // Build a map of images/dates from HTML event cards
+        const htmlData = new Map<
+          string,
+          {
+            imageUrl: string | null;
+            dateText: string;
+            description: string;
+            isFree: boolean | null;
+          }
+        >();
+        $(
+          "li[class*='event'], a[href*='/event/'], a[href*='/exhibitions/']",
+        ).each((_i, el) => {
+          const $el = $(el);
+          const href =
+            $el.attr("href") || $el.find("a").first().attr("href") || "";
+          const img =
+            $el.find("img").attr("data-src") ||
+            $el.find("img").attr("src") ||
+            null;
+          const fullImg = img?.startsWith("http")
+            ? img
+            : img?.startsWith("//")
+              ? `https:${img}`
+              : img
+                ? `${BASE_URL}${img}`
+                : null;
+          const dateText = $el
+            .find(
+              "[class*='date'], time, meta[itemprop='startDate'], meta[itemprop='endDate']",
+            )
+            .text()
+            .trim();
+          const desc =
+            $el.find("[class*='description'], p").first().text().trim() || "";
+          const isFreeText = $el.text().toLowerCase();
+          const isFree = isFreeText.includes("free") ? true : null;
+          if (href) {
+            const fullHref = href.startsWith("http")
+              ? href
+              : `${BASE_URL}${href}`;
+            htmlData.set(fullHref, {
+              imageUrl: fullImg,
+              dateText,
+              description: desc,
+              isFree,
+            });
+          }
+        });
+
+        // Enrich dataLayer events
+        for (const event of events) {
+          const html = htmlData.get(event.sourceUrl);
+          if (html) {
+            if (html.imageUrl) event.imageUrl = html.imageUrl;
+            if (html.description)
+              event.description = html.description.slice(0, 500);
+            if (html.dateText) {
+              const { startDate, endDate } = parseDateRange(html.dateText);
+              if (startDate) event.startDate = startDate;
+              if (endDate) event.endDate = endDate;
+            }
+            if (html.isFree !== null) event.isFree = html.isFree;
+          }
+        }
+      }
+
+      // HTML fallback: if dataLayer had nothing, parse HTML directly
       if (events.length === 0) {
         $("a[href*='/event/'], a[href*='/exhibitions/']").each((_i, el) => {
           const $el = $(el);
@@ -111,8 +180,8 @@ export const vandaScraper: VenueScraper = {
             $el.find("[class*='description'], p").first().text().trim() || "";
 
           const imageUrl =
-            $el.find("img").attr("src") ||
             $el.find("img").attr("data-src") ||
+            $el.find("img").attr("src") ||
             null;
 
           const sourceUrl = href.startsWith("http")
@@ -131,9 +200,11 @@ export const vandaScraper: VenueScraper = {
               endDate,
               imageUrl: imageUrl?.startsWith("http")
                 ? imageUrl
-                : imageUrl
-                  ? `${BASE_URL}${imageUrl}`
-                  : null,
+                : imageUrl?.startsWith("//")
+                  ? `https:${imageUrl}`
+                  : imageUrl
+                    ? `${BASE_URL}${imageUrl}`
+                    : null,
               sourceUrl,
               isFree,
             });
