@@ -19,7 +19,7 @@ https://github.com/VictorOstlund/artsea
 - About page with attribution
 - FilterBar: event type, date range, area, venue (combinable, URL-based)
 - Full-text search using Postgres ts_vector + plainto_tsquery
-- Scrapers (9 venues):
+- Scrapers (12 venues):
   - Barbican Centre (66 events) — Drupal Views .views-row + data-day + pagination
   - V&A Museum (150 events) — dataLayer extraction enriched with HTML images
   - Tate Modern (15 events) — static HTML cards
@@ -47,6 +47,10 @@ https://github.com/VictorOstlund/artsea
 - Southbank Centre, Hayward Gallery, Royal Academy — all Cloudflare-protected
 - Solved by scraping TimeOut London venue pages (legal, public data)
 - TimeOut uses stable `data-testid` selectors and `<time>` elements with ISO dates
+
+## Upcoming Features (Deferred)
+- **User/login functionality** — authentication system for personalized features
+- **Art marketplace** — listings-only MVP (similar to Facebook Marketplace for art, no liability)
 
 ## Architecture
 ```
