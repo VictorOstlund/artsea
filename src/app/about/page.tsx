@@ -19,6 +19,17 @@ const VENUES = [
   { name: "V&A Museum", url: "https://www.vam.ac.uk" },
   { name: "Tate Modern", url: "https://www.tate.org.uk" },
   { name: "Southbank Centre", url: "https://www.southbankcentre.co.uk" },
+  { name: "National Gallery", url: "https://www.nationalgallery.org.uk" },
+  { name: "Design Museum", url: "https://designmuseum.org" },
+  { name: "Whitechapel Gallery", url: "https://www.whitechapelgallery.org" },
+  { name: "Somerset House", url: "https://www.somersethouse.org.uk" },
+  { name: "Serpentine Galleries", url: "https://www.serpentinegalleries.org" },
+  { name: "Saatchi Gallery", url: "https://www.saatchigallery.com" },
+  {
+    name: "Hayward Gallery",
+    url: "https://www.southbankcentre.co.uk/venues/hayward-gallery",
+  },
+  { name: "Royal Academy of Arts", url: "https://www.royalacademy.org.uk" },
 ];
 
 export default function AboutPage() {
@@ -81,10 +92,18 @@ export default function AboutPage() {
 
       <h2 className="mt-10 text-xl font-semibold text-gray-900">Attribution</h2>
       <p className="mt-4 text-gray-700 leading-relaxed">
-        All event information is sourced from publicly available listings on
-        venue websites. We respect each venue&apos;s robots.txt directives and
-        link back to original sources. ArtSea is not affiliated with any of the
-        venues listed.
+        Event information is sourced from publicly available listings on venue
+        websites and third-party listing platforms including{" "}
+        <a
+          href="https://www.timeout.com/london"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-900 hover:underline"
+        >
+          TimeOut London
+        </a>
+        . Every listing links back to its original source. ArtSea is not
+        affiliated with any of the venues or platforms listed.
       </p>
     </div>
   );
