@@ -16,7 +16,7 @@ https://github.com/VictorOstlund/artsea
 - Home page: chronological event feed with responsive 3-column grid
 - Event detail page (/events/[slug]) with dynamic metadata
 - Venue page (/venues/[slug]) with event listings
-- About page with attribution
+- About page with all 12 venues and accurate TimeOut attribution
 - FilterBar: event type, date range, area, venue (combinable, URL-based)
 - Full-text search using Postgres ts_vector + plainto_tsquery
 - Scrapers (12 venues):
