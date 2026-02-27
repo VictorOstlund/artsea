@@ -2,9 +2,8 @@ name: Daily Scrape
 
 on:
   schedule:
-    # Run daily at 3:00 AM UTC
-    - cron: '0 3 * * *'
-  workflow_dispatch: # Allow manual trigger
+    - cron: '0 2 * * *'
+  workflow_dispatch:
 
 jobs:
   scrape:
@@ -29,9 +28,8 @@ jobs:
       - name: Trigger Vercel revalidation
         if: success()
         env:
-          VERCEL_REVALIDATE_TOKEN: ${{ secrets.VERCEL_REVALIDATE_TOKEN }}
-          VERCEL_DEPLOY_URL: ${{ secrets.VERCEL_DEPLOY_URL }}
+          VERCEL_REVALIDATE_URL: ${{ secrets.VERCEL_REVALIDATE_URL }}
         run: |
-          if [ -n "$VERCEL_DEPLOY_URL" ] && [ -n "$VERCEL_REVALIDATE_TOKEN" ]; then
-            curl -s "${VERCEL_DEPLOY_URL}/api/revalidate?secret=${VERCEL_REVALIDATE_TOKEN}" || true
+          if [ -n "$VERCEL_REVALIDATE_URL" ]; then
+            curl -s -X POST "$VERCEL_REVALIDATE_URL" || true
           fi
