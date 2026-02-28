@@ -204,7 +204,7 @@ export function FilterBar({ venues }: FilterBarProps) {
           <select
             value={currentVenue}
             onChange={(e) => updateParams("venue", e.target.value)}
-            className="w-full max-w-xs appearance-none rounded-sm border border-edge bg-transparent px-4 py-2 text-xs font-medium tracking-wide text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
+            className="w-full max-w-xs appearance-none rounded-sm border border-edge bg-surface px-4 py-2 text-xs font-medium tracking-wide text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
           >
             <option value="">All Venues</option>
             {venues.map((v) => (
