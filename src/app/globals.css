@@ -2,19 +2,19 @@
 
 /* ─── Gallery Color System ─── */
 :root {
-  --bg: #FFFFFF;
-  --bg-alt: #FAFAF8;
+  --bg: #F8F7F4;
+  --bg-alt: #EDE9E3;
   --bg-card: #FFFFFF;
   --fg: #1A1A1A;
   --fg-muted: #6B6B6B;
   --fg-subtle: #999999;
   --accent: #8B6F4E;
   --accent-hover: #7A6044;
-  --border: #E8E6E1;
-  --border-subtle: #F0EDE8;
-  --shadow-color: rgba(0, 0, 0, 0.06);
-  --shadow-color-hover: rgba(0, 0, 0, 0.12);
-  --tag-bg: #F5F3EF;
+  --border: #E0DCD5;
+  --border-subtle: #EDE9E3;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --shadow-color-hover: rgba(0, 0, 0, 0.1);
+  --tag-bg: #EDE9E3;
   --tag-fg: #5C5C5C;
   --badge-bg: rgba(255, 255, 255, 0.88);
   --input-bg: #FFFFFF;
@@ -23,43 +23,43 @@
 /* ─── Dark Mode (System Preference) ─── */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1C1C1E;
-    --bg-alt: #232325;
-    --bg-card: #2C2C2E;
+    --bg: #111111;
+    --bg-alt: #1A1A1A;
+    --bg-card: #1E1E1E;
     --fg: #F5F5F0;
     --fg-muted: #A0A0A0;
     --fg-subtle: #707070;
-    --accent: #C4A77D;
-    --accent-hover: #D4B78D;
-    --border: #3A3A3C;
-    --border-subtle: #2E2E30;
+    --accent: #D4A853;
+    --accent-hover: #E0B863;
+    --border: #2A2A2A;
+    --border-subtle: #222222;
     --shadow-color: rgba(0, 0, 0, 0.3);
     --shadow-color-hover: rgba(0, 0, 0, 0.5);
-    --tag-bg: #3A3A3C;
+    --tag-bg: #2A2A2A;
     --tag-fg: #CCCCCC;
     --badge-bg: rgba(0, 0, 0, 0.6);
-    --input-bg: #2C2C2E;
+    --input-bg: #1E1E1E;
   }
 }
 
 /* ─── Dark Mode (Manual Toggle) ─── */
 :root[data-theme="dark"] {
-  --bg: #1C1C1E;
-  --bg-alt: #232325;
-  --bg-card: #2C2C2E;
+  --bg: #111111;
+  --bg-alt: #1A1A1A;
+  --bg-card: #1E1E1E;
   --fg: #F5F5F0;
   --fg-muted: #A0A0A0;
   --fg-subtle: #707070;
-  --accent: #C4A77D;
-  --accent-hover: #D4B78D;
-  --border: #3A3A3C;
-  --border-subtle: #2E2E30;
+  --accent: #D4A853;
+  --accent-hover: #E0B863;
+  --border: #2A2A2A;
+  --border-subtle: #222222;
   --shadow-color: rgba(0, 0, 0, 0.3);
   --shadow-color-hover: rgba(0, 0, 0, 0.5);
-  --tag-bg: #3A3A3C;
+  --tag-bg: #2A2A2A;
   --tag-fg: #CCCCCC;
   --badge-bg: rgba(0, 0, 0, 0.6);
-  --input-bg: #2C2C2E;
+  --input-bg: #1E1E1E;
 }
 
 /* ─── Tailwind Theme ─── */
@@ -94,7 +94,7 @@ body {
 }
 
 .card-shadow-hover {
-  box-shadow: 0 8px 25px var(--shadow-color-hover), 0 4px 10px var(--shadow-color);
+  box-shadow: 0 10px 30px var(--shadow-color-hover), 0 4px 10px var(--shadow-color);
 }
 
 /* ─── Smooth Scrolling ─── */
@@ -106,4 +106,69 @@ html {
 ::selection {
   background: var(--accent);
   color: #FFFFFF;
+}
+
+/* ─── Header scroll border ─── */
+.header-scrolled {
+  border-bottom-color: var(--border);
+}
+
+.header-top {
+  border-bottom-color: transparent;
+}
+
+/* ─── Decorative rule ─── */
+.accent-rule {
+  width: 60px;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* ─── Card hover accent border ─── */
+.card-accent-top {
+  position: relative;
+}
+
+.card-accent-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  z-index: 10;
+}
+
+.card-accent-top:hover::before {
+  transform: scaleX(1);
+}
+
+/* ─── Image overlay on hover ─── */
+.card-img-overlay {
+  position: relative;
+}
+
+.card-img-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s ease;
+}
+
+.card-img-overlay:hover::after {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Filter chip scrollbar ─── */
+.chip-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chip-scroll::-webkit-scrollbar {
+  display: none;
 }

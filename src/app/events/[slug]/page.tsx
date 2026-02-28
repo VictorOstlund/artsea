@@ -85,10 +85,10 @@ export default async function EventPage({ params }: Props) {
     <div className="mx-auto max-w-3xl">
       <Link
         href="/"
-        className="inline-flex items-center text-sm text-muted hover:text-foreground transition-colors mb-8"
+        className="inline-flex items-center text-xs font-medium tracking-[0.08em] uppercase text-muted hover:text-foreground transition-colors mb-10"
       >
         <svg
-          className="mr-1.5 h-4 w-4"
+          className="mr-1.5 h-3.5 w-3.5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -104,7 +104,7 @@ export default async function EventPage({ params }: Props) {
       </Link>
 
       {event.imageUrl && (
-        <div className="aspect-[16/9] overflow-hidden rounded-2xl bg-surface-alt mb-8 relative">
+        <div className="aspect-[16/9] overflow-hidden rounded-sm bg-surface-alt mb-10 relative">
           <Image
             src={event.imageUrl}
             alt={event.title}
@@ -116,27 +116,29 @@ export default async function EventPage({ params }: Props) {
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-2 mb-5">
-        <span className="rounded-full bg-tag px-3 py-1 text-xs font-medium text-tag-text">
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <span className="text-[10px] font-medium tracking-[0.08em] uppercase text-accent">
           {typeLabel}
         </span>
         {event.isSoldOut === true && (
-          <span className="rounded-full bg-foreground px-3 py-1 text-xs font-medium text-surface">
+          <span className="rounded-sm bg-foreground px-3 py-0.5 text-[10px] font-medium tracking-[0.08em] uppercase text-surface">
             Sold Out
           </span>
         )}
         {event.isFree === true && (
-          <span className="rounded-full bg-tag px-3 py-1 text-xs font-medium text-accent">
+          <span className="text-[10px] font-medium tracking-[0.08em] uppercase text-accent">
             Free
           </span>
         )}
       </div>
 
-      <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight">
+      <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.05]">
         {event.title}
       </h1>
 
-      <div className="mt-5 space-y-2">
+      <div className="accent-rule mt-6 mb-6" />
+
+      <div className="space-y-2">
         <p className="text-base text-muted">
           {formatDateRange(event.startDate, event.endDate)}
         </p>
@@ -152,19 +154,19 @@ export default async function EventPage({ params }: Props) {
       </div>
 
       {event.description && (
-        <div className="mt-8">
+        <div className="mt-10">
           <p className="text-muted leading-relaxed text-[1.05rem]">
             {event.description}
           </p>
         </div>
       )}
 
-      <div className="mt-10">
+      <div className="mt-12">
         <a
           href={event.sourceUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center rounded-xl bg-accent px-6 py-3 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
+          className="inline-flex items-center rounded-sm bg-accent px-6 py-3 text-sm font-medium tracking-wide text-white hover:bg-accent-hover transition-colors"
         >
           View on {event.venueName}
           <svg
@@ -177,7 +179,7 @@ export default async function EventPage({ params }: Props) {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
             />
           </svg>
         </a>

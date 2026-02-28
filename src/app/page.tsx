@@ -129,37 +129,71 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <div>
-      {/* Gallery intro */}
-      <div className="mb-10">
-        <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
-          Discover London&apos;s
-          <br />
-          <span className="text-accent">Art Scene</span>
-        </h1>
-        <p className="mt-4 text-lg text-muted max-w-lg">
-          Exhibitions, theatre, dance, workshops, and creative events from the
-          city&apos;s leading cultural venues.
-        </p>
-      </div>
+      {/* Editorial Hero */}
+      <section className="mb-20 pt-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+          <div className="lg:col-span-8">
+            <p className="text-xs font-medium tracking-[0.15em] uppercase text-accent mb-4">
+              London&apos;s Cultural Guide
+            </p>
+            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground leading-[0.95] tracking-tight">
+              Discover
+              <br />
+              the Art
+              <br />
+              <span className="text-accent italic">Scene</span>
+            </h1>
+            <div className="accent-rule mt-8" />
+          </div>
+          <div className="lg:col-span-4 pb-2">
+            <p className="text-base text-muted leading-relaxed">
+              Exhibitions, theatre, dance, workshops, and creative events from
+              London&apos;s leading cultural venues — updated daily.
+            </p>
+          </div>
+        </div>
+      </section>
 
-      <div className="mb-8">
+      {/* Filters */}
+      <section className="mb-12">
         <Suspense>
           <FilterBar venues={allVenues} />
         </Suspense>
-      </div>
+      </section>
 
-      <div className="mb-6">
-        <p className="text-sm text-muted">
-          {filteredEvents.length} event{filteredEvents.length !== 1 ? "s" : ""}
+      {/* Event count */}
+      <div className="mb-8">
+        <p className="text-xs font-medium tracking-[0.08em] uppercase text-subtle">
+          {filteredEvents.length} event
+          {filteredEvents.length !== 1 ? "s" : ""}
           {hasFilters ? " matching your filters" : " across London"}
         </p>
       </div>
 
+      {/* Event Grid */}
       {filteredEvents.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredEvents.map((event) => (
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Featured first event — spans 2 cols on large screens */}
+          {filteredEvents.length > 0 && (
+            <div className="sm:col-span-2 lg:col-span-2">
+              <EventCard
+                key={filteredEvents[0].id}
+                title={filteredEvents[0].title}
+                venueName={filteredEvents[0].venueName}
+                startDate={filteredEvents[0].startDate}
+                endDate={filteredEvents[0].endDate}
+                eventType={filteredEvents[0].eventType}
+                imageUrl={filteredEvents[0].imageUrl}
+                slug={filteredEvents[0].slug}
+                sourceUrl={filteredEvents[0].sourceUrl}
+                isFree={filteredEvents[0].isFree}
+                isSoldOut={filteredEvents[0].isSoldOut}
+              />
+            </div>
+          )}
+          {filteredEvents.slice(1).map((event) => (
             <EventCard
               key={event.id}
               title={event.title}

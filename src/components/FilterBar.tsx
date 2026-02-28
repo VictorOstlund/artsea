@@ -14,18 +14,46 @@ const EVENT_TYPES = [
   { value: "music", label: "Music" },
 ];
 
-const AREAS = ["Central", "East", "South", "West", "North"];
+const AREAS = [
+  { value: "Central", label: "Central" },
+  { value: "East", label: "East" },
+  { value: "South", label: "South" },
+  { value: "West", label: "West" },
+  { value: "North", label: "North" },
+];
 
 const DATE_RANGES = [
-  { value: "", label: "Any date" },
   { value: "today", label: "Today" },
-  { value: "week", label: "This week" },
-  { value: "weekend", label: "This weekend" },
-  { value: "month", label: "This month" },
+  { value: "week", label: "This Week" },
+  { value: "weekend", label: "Weekend" },
+  { value: "month", label: "This Month" },
 ];
 
 interface FilterBarProps {
   venues: Array<{ slug: string; name: string }>;
+}
+
+function Chip({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-medium tracking-wide uppercase transition-all duration-200 cursor-pointer ${
+        active
+          ? "bg-accent text-white"
+          : "border border-edge text-muted hover:border-accent hover:text-foreground"
+      }`}
+    >
+      {label}
+    </button>
+  );
 }
 
 export function FilterBar({ venues }: FilterBarProps) {
@@ -51,14 +79,28 @@ export function FilterBar({ venues }: FilterBarProps) {
     [router, searchParams],
   );
 
+  const toggleParam = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (params.get(key) === value) {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+      router.push(`/?${params.toString()}`);
+    },
+    [router, searchParams],
+  );
+
   const clearAll = useCallback(() => {
     router.push("/");
   }, [router]);
 
-  const hasFilters = currentType || currentArea || currentDate || currentVenue;
+  const hasFilters =
+    currentType || currentArea || currentDate || currentVenue || currentSearch;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Search */}
       <form
         onSubmit={(e) => {
@@ -77,7 +119,7 @@ export function FilterBar({ venues }: FilterBarProps) {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
+              strokeWidth={1.5}
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
           </svg>
@@ -86,71 +128,61 @@ export function FilterBar({ venues }: FilterBarProps) {
             name="q"
             defaultValue={currentSearch}
             placeholder="Search events..."
-            className="w-full rounded-xl border border-edge bg-input py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-subtle focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition-colors"
+            className="w-full border-b border-edge bg-transparent py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-subtle focus:border-accent focus:outline-none transition-colors"
           />
         </div>
       </form>
 
-      {/* Filter pills */}
-      <div className="flex flex-wrap gap-2">
-        <select
-          value={currentType}
-          onChange={(e) => updateParams("type", e.target.value)}
-          className="rounded-full border border-edge bg-input px-4 py-2 text-sm text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
-        >
-          <option value="">All types</option>
-          {EVENT_TYPES.map((t) => (
-            <option key={t.value} value={t.value}>
-              {t.label}
-            </option>
-          ))}
-        </select>
+      {/* Date chips */}
+      <div className="flex gap-2 overflow-x-auto chip-scroll pb-1">
+        {DATE_RANGES.map((d) => (
+          <Chip
+            key={d.value}
+            label={d.label}
+            active={currentDate === d.value}
+            onClick={() => toggleParam("date", d.value)}
+          />
+        ))}
+        <span className="mx-1 self-center text-edge-subtle">|</span>
+        {EVENT_TYPES.map((t) => (
+          <Chip
+            key={t.value}
+            label={t.label}
+            active={currentType === t.value}
+            onClick={() => toggleParam("type", t.value)}
+          />
+        ))}
+      </div>
 
-        <select
-          value={currentDate}
-          onChange={(e) => updateParams("date", e.target.value)}
-          className="rounded-full border border-edge bg-input px-4 py-2 text-sm text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
-        >
-          {DATE_RANGES.map((d) => (
-            <option key={d.value} value={d.value}>
-              {d.label}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={currentArea}
-          onChange={(e) => updateParams("area", e.target.value)}
-          className="rounded-full border border-edge bg-input px-4 py-2 text-sm text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
-        >
-          <option value="">All areas</option>
-          {AREAS.map((a) => (
-            <option key={a} value={a}>
-              {a} London
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={currentVenue}
-          onChange={(e) => updateParams("venue", e.target.value)}
-          className="rounded-full border border-edge bg-input px-4 py-2 text-sm text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
-        >
-          <option value="">All venues</option>
-          {venues.map((v) => (
-            <option key={v.slug} value={v.slug}>
-              {v.name}
-            </option>
-          ))}
-        </select>
-
+      {/* Area + Venue chips */}
+      <div className="flex gap-2 overflow-x-auto chip-scroll pb-1">
+        {AREAS.map((a) => (
+          <Chip
+            key={a.value}
+            label={a.label}
+            active={currentArea === a.value}
+            onClick={() => toggleParam("area", a.value)}
+          />
+        ))}
+        <span className="mx-1 self-center text-edge-subtle">|</span>
+        {venues.map((v) => (
+          <Chip
+            key={v.slug}
+            label={v.name}
+            active={currentVenue === v.slug}
+            onClick={() => toggleParam("venue", v.slug)}
+          />
+        ))}
         {hasFilters && (
-          <button
-            onClick={clearAll}
-            className="rounded-full border border-edge bg-tag px-4 py-2 text-sm text-tag-text hover:text-foreground transition-colors cursor-pointer"
-          >
-            Clear filters
-          </button>
+          <>
+            <span className="mx-1 self-center text-edge-subtle">|</span>
+            <button
+              onClick={clearAll}
+              className="shrink-0 rounded-full px-4 py-1.5 text-xs font-medium tracking-wide uppercase text-muted hover:text-foreground transition-colors cursor-pointer"
+            >
+              Clear all
+            </button>
+          </>
         )}
       </div>
     </div>

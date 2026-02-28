@@ -39,6 +39,24 @@ export function formatDateRange(
   return `${startShort} — ${formatter.format(end)}`;
 }
 
+function formatStylisedDate(dateStr: string): {
+  day: string;
+  monthYear: string;
+} {
+  const d = new Date(dateStr + "T00:00:00");
+  const day = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    timeZone: "Europe/London",
+  }).format(d);
+  const monthYear = new Intl.DateTimeFormat("en-GB", {
+    month: "short",
+    timeZone: "Europe/London",
+  })
+    .format(d)
+    .toUpperCase();
+  return { day, monthYear };
+}
+
 interface EventCardProps {
   title: string;
   venueName: string;
@@ -65,14 +83,15 @@ export function EventCard({
 }: EventCardProps) {
   const typeLabel = EVENT_TYPE_LABELS[eventType] || eventType;
   const soldOut = isSoldOut === true;
+  const { day, monthYear } = formatStylisedDate(startDate);
 
   return (
     <Link
       href={`/events/${slug}`}
-      className={`group block overflow-hidden rounded-xl bg-card card-shadow transition-all duration-300 hover:card-shadow-hover hover:scale-[1.02] ${soldOut ? "opacity-60 grayscale-[30%]" : ""}`}
+      className={`group block overflow-hidden rounded-sm bg-card card-shadow card-accent-top transition-all duration-300 hover:card-shadow-hover ${soldOut ? "opacity-60 grayscale-[30%]" : ""}`}
     >
       {/* Image */}
-      <div className="aspect-[3/2] bg-surface-alt relative overflow-hidden">
+      <div className="aspect-[3/2] bg-surface-alt relative overflow-hidden card-img-overlay">
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -98,17 +117,13 @@ export function EventCard({
             </svg>
           </div>
         )}
-        {/* Type badge */}
-        <span className="absolute bottom-3 left-3 rounded-full bg-badge-overlay backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
-          {typeLabel}
-        </span>
         {/* Status badges */}
         {soldOut ? (
-          <span className="absolute top-3 right-3 rounded-full bg-foreground/80 px-3 py-1 text-xs font-medium text-surface">
+          <span className="absolute top-3 right-3 rounded-sm bg-foreground/80 px-3 py-1 text-xs font-medium text-surface">
             Sold Out
           </span>
         ) : isFree === true ? (
-          <span className="absolute top-3 right-3 rounded-full bg-badge-overlay backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
+          <span className="absolute top-3 right-3 rounded-sm bg-badge-overlay backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
             Free
           </span>
         ) : null}
@@ -116,13 +131,49 @@ export function EventCard({
 
       {/* Content */}
       <div className="p-5">
-        <h3 className="font-serif text-lg font-semibold text-foreground leading-snug line-clamp-2 group-hover:text-accent transition-colors duration-200">
+        {/* Type label as small caps pill */}
+        <span className="text-[10px] font-medium tracking-[0.08em] uppercase text-accent">
+          {typeLabel}
+        </span>
+
+        <h3 className="mt-2 font-serif text-lg font-semibold text-foreground leading-snug line-clamp-2 tracking-tight group-hover:text-accent transition-colors duration-200">
           {title}
         </h3>
-        <p className="mt-2 text-sm text-muted">{venueName}</p>
-        <p className="mt-1 text-sm text-subtle">
-          {formatDateRange(startDate, endDate)}
-        </p>
+
+        <p className="mt-3 text-sm text-muted">{venueName}</p>
+
+        {/* Stylised date */}
+        <div className="mt-2 flex items-baseline gap-1.5">
+          <span className="text-lg font-serif font-semibold text-foreground leading-none">
+            {day}
+          </span>
+          <span className="text-[10px] font-medium tracking-[0.08em] uppercase text-subtle">
+            {monthYear}
+          </span>
+          {endDate && (
+            <span className="text-xs text-subtle ml-0.5">
+              — {formatDateRange(startDate, endDate).split("—")[1]?.trim()}
+            </span>
+          )}
+        </div>
+
+        {/* Hover arrow */}
+        <div className="mt-4 flex items-center gap-1 text-xs font-medium tracking-wide uppercase text-accent opacity-0 translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0">
+          View
+          <svg
+            className="h-3 w-3"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+            />
+          </svg>
+        </div>
       </div>
     </Link>
   );

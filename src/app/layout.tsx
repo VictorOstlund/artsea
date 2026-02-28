@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { ScrollHeader } from "@/components/ScrollHeader";
 import "./globals.css";
 
 const inter = Inter({
@@ -44,51 +45,50 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-surface`}
       >
-        <header className="sticky top-0 z-50 border-b border-edge bg-surface/80 backdrop-blur-lg">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+        <ScrollHeader>
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-10">
             <Link href="/" className="group block">
-              <h1 className="font-serif text-2xl font-bold tracking-tight text-foreground">
+              <span className="font-serif text-2xl font-bold tracking-tight text-foreground">
                 ArtSea
-              </h1>
-              <p className="text-xs tracking-widest uppercase text-muted">
-                London Art Events
-              </p>
+              </span>
             </Link>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               <Link
                 href="/about"
-                className="text-sm font-medium text-muted transition-colors hover:text-foreground"
+                className="text-xs font-medium tracking-widest uppercase text-muted transition-colors hover:text-foreground"
               >
                 About
               </Link>
               <ThemeToggle />
             </div>
           </div>
-        </header>
+        </ScrollHeader>
 
-        <main className="mx-auto max-w-6xl px-5 py-10 sm:px-8">{children}</main>
+        <main className="mx-auto max-w-7xl px-6 py-12 sm:px-10">
+          {children}
+        </main>
 
-        <footer className="border-t border-edge bg-surface-alt mt-20">
-          <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8">
+        <footer className="border-t border-edge bg-surface-alt mt-24">
+          <div className="mx-auto max-w-7xl px-6 py-10 sm:px-10">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <p className="font-serif text-lg font-semibold text-foreground">
                   ArtSea
                 </p>
                 <p className="mt-1 text-sm text-muted">
-                  Aggregating public event listings from London cultural venues.
+                  London&apos;s art and cultural events, in one place.
                 </p>
               </div>
-              <div className="flex items-center gap-6 text-sm text-muted">
+              <div className="flex items-center gap-6">
                 <Link
                   href="/about"
-                  className="transition-colors hover:text-foreground"
+                  className="text-xs font-medium tracking-widest uppercase text-muted transition-colors hover:text-foreground"
                 >
                   About
                 </Link>
               </div>
             </div>
-            <p className="mt-6 text-xs text-subtle">
+            <p className="mt-8 text-xs text-subtle">
               All events link back to their original source. ArtSea is not
               affiliated with any venue listed.
             </p>

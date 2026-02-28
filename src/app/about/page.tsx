@@ -37,10 +37,10 @@ export default function AboutPage() {
     <div className="mx-auto max-w-2xl">
       <Link
         href="/"
-        className="inline-flex items-center text-sm text-muted hover:text-foreground transition-colors mb-8"
+        className="inline-flex items-center text-xs font-medium tracking-[0.08em] uppercase text-muted hover:text-foreground transition-colors mb-10"
       >
         <svg
-          className="mr-1.5 h-4 w-4"
+          className="mr-1.5 h-3.5 w-3.5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -55,11 +55,15 @@ export default function AboutPage() {
         Back to events
       </Link>
 
-      <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+      <p className="text-xs font-medium tracking-[0.15em] uppercase text-accent mb-4">
+        About
+      </p>
+      <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
         About ArtSea
       </h1>
+      <div className="accent-rule mt-6 mb-10" />
 
-      <div className="mt-8 space-y-5 text-muted leading-relaxed text-[1.05rem]">
+      <div className="space-y-5 text-muted leading-relaxed text-[1.05rem]">
         <p>
           ArtSea is a free discovery platform for art and creative events
           happening across London. We automatically aggregate public event
@@ -72,25 +76,33 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <h2 className="mt-12 font-serif text-2xl font-semibold text-foreground">
-        Venues we cover
-      </h2>
-      <ul className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {VENUES.map((venue) => (
-          <li key={venue.url}>
-            <a
-              href={venue.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted hover:text-accent transition-colors"
-            >
-              {venue.name}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <section className="mt-16">
+        <p className="text-xs font-medium tracking-[0.15em] uppercase text-accent mb-4">
+          Venues
+        </p>
+        <h2 className="font-serif text-2xl font-semibold text-foreground">
+          Venues we cover
+        </h2>
+        <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {VENUES.map((venue) => (
+            <li key={venue.url}>
+              <a
+                href={venue.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted hover:text-accent transition-colors"
+              >
+                {venue.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-      <div className="mt-12 border-t border-edge pt-8">
+      <section className="mt-16 border-t border-edge pt-10">
+        <p className="text-xs font-medium tracking-[0.15em] uppercase text-accent mb-4">
+          Credits
+        </p>
         <h2 className="font-serif text-2xl font-semibold text-foreground">
           Attribution
         </h2>
@@ -108,7 +120,7 @@ export default function AboutPage() {
           . Every listing links back to its original source. ArtSea is not
           affiliated with any of the venues or platforms listed.
         </p>
-      </div>
+      </section>
     </div>
   );
 }
