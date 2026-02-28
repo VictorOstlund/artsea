@@ -69,7 +69,7 @@ export function FilterBar({ venues }: FilterBarProps) {
       >
         <div className="relative">
           <svg
-            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-subtle"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -86,18 +86,17 @@ export function FilterBar({ venues }: FilterBarProps) {
             name="q"
             defaultValue={currentSearch}
             placeholder="Search events..."
-            className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+            className="w-full rounded-xl border border-edge bg-input py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-subtle focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition-colors"
           />
         </div>
       </form>
 
       {/* Filter pills */}
       <div className="flex flex-wrap gap-2">
-        {/* Event type */}
         <select
           value={currentType}
           onChange={(e) => updateParams("type", e.target.value)}
-          className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 focus:border-gray-400 focus:outline-none"
+          className="rounded-full border border-edge bg-input px-4 py-2 text-sm text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
         >
           <option value="">All types</option>
           {EVENT_TYPES.map((t) => (
@@ -107,11 +106,10 @@ export function FilterBar({ venues }: FilterBarProps) {
           ))}
         </select>
 
-        {/* Date range */}
         <select
           value={currentDate}
           onChange={(e) => updateParams("date", e.target.value)}
-          className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 focus:border-gray-400 focus:outline-none"
+          className="rounded-full border border-edge bg-input px-4 py-2 text-sm text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
         >
           {DATE_RANGES.map((d) => (
             <option key={d.value} value={d.value}>
@@ -120,11 +118,10 @@ export function FilterBar({ venues }: FilterBarProps) {
           ))}
         </select>
 
-        {/* Area */}
         <select
           value={currentArea}
           onChange={(e) => updateParams("area", e.target.value)}
-          className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 focus:border-gray-400 focus:outline-none"
+          className="rounded-full border border-edge bg-input px-4 py-2 text-sm text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
         >
           <option value="">All areas</option>
           {AREAS.map((a) => (
@@ -134,11 +131,10 @@ export function FilterBar({ venues }: FilterBarProps) {
           ))}
         </select>
 
-        {/* Venue */}
         <select
           value={currentVenue}
           onChange={(e) => updateParams("venue", e.target.value)}
-          className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 focus:border-gray-400 focus:outline-none"
+          className="rounded-full border border-edge bg-input px-4 py-2 text-sm text-foreground focus:border-accent focus:outline-none transition-colors cursor-pointer"
         >
           <option value="">All venues</option>
           {venues.map((v) => (
@@ -148,11 +144,10 @@ export function FilterBar({ venues }: FilterBarProps) {
           ))}
         </select>
 
-        {/* Clear filters */}
         {hasFilters && (
           <button
             onClick={clearAll}
-            className="rounded-full border border-gray-300 bg-gray-50 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 transition-colors"
+            className="rounded-full border border-edge bg-tag px-4 py-2 text-sm text-tag-text hover:text-foreground transition-colors cursor-pointer"
           >
             Clear filters
           </button>

@@ -129,14 +129,27 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <div>
+      {/* Gallery intro */}
+      <div className="mb-10">
+        <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
+          Discover London&apos;s
+          <br />
+          <span className="text-accent">Art Scene</span>
+        </h1>
+        <p className="mt-4 text-lg text-muted max-w-lg">
+          Exhibitions, theatre, dance, workshops, and creative events from the
+          city&apos;s leading cultural venues.
+        </p>
+      </div>
+
       <div className="mb-8">
         <Suspense>
           <FilterBar venues={allVenues} />
         </Suspense>
       </div>
 
-      <div className="mb-4">
-        <p className="text-sm text-gray-500">
+      <div className="mb-6">
+        <p className="text-sm text-muted">
           {filteredEvents.length} event{filteredEvents.length !== 1 ? "s" : ""}
           {hasFilters ? " matching your filters" : " across London"}
         </p>
@@ -145,7 +158,7 @@ export default async function Home({ searchParams }: Props) {
       {filteredEvents.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {filteredEvents.map((event) => (
             <EventCard
               key={event.id}

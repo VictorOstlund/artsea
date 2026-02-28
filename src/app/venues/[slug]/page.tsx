@@ -65,10 +65,10 @@ export default async function VenuePage({ params }: Props) {
     <div>
       <Link
         href="/"
-        className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-6"
+        className="inline-flex items-center text-sm text-muted hover:text-foreground transition-colors mb-8"
       >
         <svg
-          className="mr-1 h-4 w-4"
+          className="mr-1.5 h-4 w-4"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -76,39 +76,39 @@ export default async function VenuePage({ params }: Props) {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2}
+            strokeWidth={1.5}
             d="M15 19l-7-7 7-7"
           />
         </svg>
         Back to events
       </Link>
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+      <div className="mb-10">
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
           {venue.name}
         </h1>
-        <div className="mt-2 flex items-center gap-3 text-sm text-gray-500">
+        <div className="mt-3 flex items-center gap-3 text-sm text-muted">
           <span>{venue.area} London</span>
-          <span className="text-gray-300">·</span>
+          <span className="text-subtle">·</span>
           <a
             href={venue.websiteUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-700 hover:underline"
+            className="text-accent hover:text-accent-hover transition-colors"
           >
             Visit website
           </a>
         </div>
       </div>
 
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
+      <h2 className="text-lg font-semibold text-foreground mb-6">
         {venueEvents.length} upcoming event{venueEvents.length !== 1 ? "s" : ""}
       </h2>
 
       {venueEvents.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {venueEvents.map((event) => (
             <EventCard
               key={event.id}

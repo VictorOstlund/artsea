@@ -1,17 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const EVENT_TYPE_COLORS: Record<string, string> = {
-  "visual-arts": "bg-violet-100 text-violet-700",
-  theatre: "bg-rose-100 text-rose-700",
-  dance: "bg-pink-100 text-pink-700",
-  workshop: "bg-amber-100 text-amber-700",
-  talk: "bg-sky-100 text-sky-700",
-  market: "bg-emerald-100 text-emerald-700",
-  film: "bg-indigo-100 text-indigo-700",
-  music: "bg-orange-100 text-orange-700",
-};
-
 const EVENT_TYPE_LABELS: Record<string, string> = {
   "visual-arts": "Visual Arts",
   theatre: "Theatre",
@@ -74,28 +63,26 @@ export function EventCard({
   isFree,
   isSoldOut,
 }: EventCardProps) {
-  const typeColor = EVENT_TYPE_COLORS[eventType] || "bg-gray-100 text-gray-700";
   const typeLabel = EVENT_TYPE_LABELS[eventType] || eventType;
-
   const soldOut = isSoldOut === true;
 
   return (
     <Link
       href={`/events/${slug}`}
-      className={`group block overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-gray-200 transition-shadow hover:shadow-md ${soldOut ? "opacity-60 grayscale-[30%]" : ""}`}
+      className={`group block overflow-hidden rounded-xl bg-card card-shadow transition-all duration-300 hover:card-shadow-hover hover:scale-[1.02] ${soldOut ? "opacity-60 grayscale-[30%]" : ""}`}
     >
-      {/* Image area */}
-      <div className="aspect-[16/9] bg-gray-100 relative">
+      {/* Image */}
+      <div className="aspect-[3/2] bg-surface-alt relative overflow-hidden">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={title}
             fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-gray-300">
+          <div className="flex h-full w-full items-center justify-center text-subtle">
             <svg
               className="h-12 w-12"
               fill="none"
@@ -112,29 +99,28 @@ export function EventCard({
           </div>
         )}
         {/* Type badge */}
-        <span
-          className={`absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-xs font-medium ${typeColor}`}
-        >
+        <span className="absolute bottom-3 left-3 rounded-full bg-badge-overlay backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
           {typeLabel}
         </span>
+        {/* Status badges */}
         {soldOut ? (
-          <span className="absolute top-3 right-3 rounded-full bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-white">
+          <span className="absolute top-3 right-3 rounded-full bg-foreground/80 px-3 py-1 text-xs font-medium text-surface">
             Sold Out
           </span>
         ) : isFree === true ? (
-          <span className="absolute top-3 right-3 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
+          <span className="absolute top-3 right-3 rounded-full bg-badge-overlay backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
             Free
           </span>
         ) : null}
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <h3 className="text-base font-semibold text-gray-900 group-hover:text-gray-700 line-clamp-2">
+      <div className="p-5">
+        <h3 className="font-serif text-lg font-semibold text-foreground leading-snug line-clamp-2 group-hover:text-accent transition-colors duration-200">
           {title}
         </h3>
-        <p className="mt-1 text-sm text-gray-500">{venueName}</p>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-muted">{venueName}</p>
+        <p className="mt-1 text-sm text-subtle">
           {formatDateRange(startDate, endDate)}
         </p>
       </div>

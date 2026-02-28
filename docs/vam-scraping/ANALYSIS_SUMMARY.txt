@@ -1,0 +1,310 @@
+================================================================================
+V&A WHAT'S ON PAGE - WEB SCRAPING ANALYSIS SUMMARY
+================================================================================
+
+ANALYSIS DATE: 2026-02-16
+TARGET URL: https://www.vam.ac.uk/whatson
+
+================================================================================
+KEY FINDINGS
+================================================================================
+
+1. PAGE STRUCTURE
+   - Total Events: 146 (5 featured + 141 main list)
+   - Page Size: 12,403 lines (~70-75 KB)
+   - Loading Strategy: Server-side rendered, static HTML
+   - Pagination: NONE - all events load on initial page
+   - Infinite Scroll: NONE
+   - JavaScript Required: NO - fully server-rendered
+
+2. EVENT DATA AVAILABILITY
+   Per-Event Data Points Available:
+   ✓ Event ID (slug)
+   ✓ Event Title
+   ✓ Event Type (talk, festival, display, exhibition, etc.)
+   ✓ Event Description (full text)
+   ✓ Start Date (ISO 8601 format)
+   ✓ End Date (ISO 8601 format)
+   ✓ Event URL (relative path)
+   ✓ Event Image (HTTPS, multiple sizes via srcset)
+   ✓ Venue Code
+   ✓ Venue Display Name
+   ✓ Venue Address
+   ✓ Price Amount
+   ✓ Price Display (formatted)
+   ✓ Is Free (boolean)
+   ✓ Audience Tags (space-separated)
+   ✓ Status Badge (optional)
+
+3. HTML STRUCTURE
+   Event Container: <li class="b-event-teaser js-wo-event">
+   Data Attributes:
+     - data-wo-type: Event category
+     - data-wo-venue: Location code
+     - data-wo-audience: Audience tags
+     - data-wo-free: Free/paid indicator
+
+4. SCHEMA.ORG IMPLEMENTATION
+   ✓ Schema.org Event markup (100% coverage)
+   ✓ Schema.org Place markup (for location)
+   ✓ Schema.org Offer markup (for pricing)
+   ✓ Complete metadata in <meta> tags
+   Most reliable source for extracting data
+
+5. GOOGLE ANALYTICS
+   ✓ Google Tag Manager implemented
+   ✓ GA4 ecommerce tracking enabled
+   ✓ 146 events in dataLayer.impressions
+   ✓ Split between featured (5) and main list (141)
+   ✓ Product IDs follow pattern: [id][suffix]
+
+6. RESPONSIVE IMAGES
+   ✓ All events have responsive images
+   ✓ 6 sizes available: 320w, 640w, 960w, 1280w, 1920w, 2560w
+   ✓ Using srcset for adaptive loading
+   ✓ All images from https://assets-cdn.vam.ac.uk/
+
+================================================================================
+CHEERIO SELECTORS (QUICK REFERENCE)
+================================================================================
+
+Get All Events:
+  $('li.b-event-teaser.js-wo-event')  // Returns jQuery collection of 146
+
+Extract from Single Event ($event):
+  ID:           $event.attr('id')
+  Title:        $event.find('meta[itemprop="name"]').eq(0).attr('content')
+  Type:         $event.attr('data-wo-type')
+  Description:  $event.find('meta[itemprop="description"]').attr('content')
+  Start Date:   $event.find('meta[itemprop="startDate"]').attr('content')
+  End Date:     $event.find('meta[itemprop="endDate"]').attr('content')
+  URL:          $event.find('a.b-event-teaser__link').attr('href')
+  Image:        $event.find('img.b-event-teaser__media-image').attr('src')
+  Venue Code:   $event.attr('data-wo-venue')
+  Venue Name:   $event.find('.b-icon-list__icon--pin .b-icon-list__item-text').text().trim()
+  Price:        $event.find('span[itemprop="price"]').text().trim()
+  Is Free:      $event.attr('data-wo-free') === ''
+
+================================================================================
+DATA QUALITY ASSESSMENT
+================================================================================
+
+RELIABILITY: ✓ EXCELLENT
+  - Complete Schema.org markup on all events
+  - Consistent DOM structure across all items
+  - No missing critical data
+  - No pagination/lazy loading complexity
+  - All data available on first page load
+
+COMPLETENESS: ✓ 100%
+  - All 146 events render in initial HTML
+  - No supplementary AJAX requests needed
+  - All event details present in initial markup
+
+CONSISTENCY: ✓ UNIFORM
+  - All events follow identical structure
+  - All data attributes present
+  - All meta tags properly formatted
+
+================================================================================
+EXTRACTION STRATEGIES
+================================================================================
+
+RECOMMENDED APPROACH:
+  1. Fetch page with HTTP GET (no headless browser needed)
+  2. Parse HTML with Cheerio
+  3. Extract using meta[itemprop="..."] selectors (Schema.org)
+  4. Fall back to DOM selectors for display/formatting text
+  5. Parse dates as ISO 8601
+  6. Prepend domain to relative URLs
+
+ALTERNATIVE SOURCES:
+  - dataLayer (GA analytics) if you need tracked event data
+  - CSS classes for styling information
+  - Data attributes for filtering/categorization
+
+================================================================================
+COMMON USE CASES
+================================================================================
+
+1. EXPORT ALL EVENTS TO CSV
+   - Use vam-cheerio-examples.js example #10
+   - Includes: ID, title, type, venue, date, URL, free status
+
+2. FIND UPCOMING EVENTS
+   - Use vam-cheerio-examples.js example #11
+   - Filters by date range, sorts chronologically
+
+3. FILTER BY CATEGORY
+   - Use CSS selector: $('li[data-wo-type="talk"]')
+   - Supported types: talk, festival, display, exhibition, etc.
+
+4. FILTER BY VENUE
+   - Use CSS selector: $('li[data-wo-venue="south-kensington"]')
+   - Maps: south-kensington → V&A South Kensington, young → Young V&A
+
+5. EXTRACT FREE EVENTS
+   - Use CSS selector: $('li[data-wo-free=""]')
+   - Compare with data-wo-free="false" for paid events
+
+6. EXTRACT ANALYTICS DATA
+   - Use regex to extract dataLayer from <script>
+   - Parse 146 impressions with list/position tracking
+
+================================================================================
+DATA ATTRIBUTES REFERENCE
+================================================================================
+
+data-wo-type Values:
+  - talk (lectures, symposiums)
+  - festival (multi-day events)
+  - display (exhibitions)
+  - exhibition (major exhibitions)
+  - course (educational courses)
+  - screening (film screenings)
+  - workshop (hands-on activities)
+  - event (general events)
+
+data-wo-venue Values:
+  - south-kensington (main museum)
+  - young (Young V&A)
+  - museum-of-childhood (V&A Museum of Childhood)
+  [More codes may exist - check during scraping]
+
+data-wo-audience Values (space-separated):
+  - for-members (members-only)
+  - evening-event (evening hours)
+  - african-heritage (cultural focus)
+  [Others discovered during analysis]
+
+data-wo-free Values:
+  - "" (empty string = FREE)
+  - "false" (= PAID event)
+
+================================================================================
+FILES PROVIDED
+================================================================================
+
+1. vam-scraping-analysis.md
+   - Complete HTML structure analysis
+   - 30+ Cheerio selectors with examples
+   - Schema.org implementation details
+   - Notes on data attributes and formats
+
+2. vam-selector-quick-reference.md
+   - Fast lookup table of all selectors
+   - CSS class hierarchy diagram
+   - Common extraction patterns
+   - Real-world examples and edge cases
+
+3. vam-cheerio-examples.js
+   - 12 production-ready code examples
+   - Complete extraction functions
+   - Error-safe implementations
+   - CSV export and filtering examples
+
+4. vam-datalayer-reference.md
+   - Google Analytics dataLayer structure
+   - 146 impressions data format
+   - Extraction methods (regex, Cheerio, browser)
+   - Analytics use cases
+
+5. vam-test-cases.js
+   - 6 test suites with 25+ assertions
+   - Validates DOM structure
+   - Checks data integrity
+   - Verifies all selectors work
+
+6. README.md
+   - Quick start guide
+   - Summary of key findings
+   - Troubleshooting tips
+   - Further resources
+
+================================================================================
+IMPORTANT NOTES FOR DEVELOPERS
+================================================================================
+
+✓ All events render server-side - no JavaScript execution needed
+✓ Use Schema.org meta tags (most reliable) over DOM text
+✓ Event URLs are relative - prepend https://www.vam.ac.uk
+✓ Free status: check data-wo-free="" (empty string = free)
+✓ Images are responsive - use appropriate size from srcset
+✓ Dates are ISO 8601 - use standard date parser
+✓ No pagination exists - all 146 events in initial load
+✓ Whitespace: trim() on all text extractions
+✓ HTML entities auto-decoded by Cheerio
+✓ Data consistency is excellent - minimal error handling needed
+
+================================================================================
+TESTING & VALIDATION
+================================================================================
+
+Run test suite:
+  node vam-test-cases.js
+
+Expected results:
+  ✓ 146 events found
+  ✓ All events have required data
+  ✓ Schema.org markup complete
+  ✓ Analytics dataLayer valid
+  ✓ Images HTTPS with srcset
+
+Validation in browser:
+  document.querySelectorAll('li.b-event-teaser').length  // 146
+  window.dataLayer[0].ecommerce.impressions.length       // 146
+
+================================================================================
+PERFORMANCE CONSIDERATIONS
+================================================================================
+
+Page Load: ~75 KB HTML (no additional requests needed)
+Parsing Time: <100ms with Cheerio
+Memory Usage: Minimal (simple DOM traversal)
+Rate Limiting: None observed, use reasonable request intervals
+Caching: Static page - safe to cache
+
+================================================================================
+ANALYSIS COMPLETENESS CHECKLIST
+================================================================================
+
+✓ HTML structure analyzed
+✓ All CSS selectors documented
+✓ Data attributes mapped
+✓ Schema.org markup verified
+✓ Google Analytics dataLayer examined
+✓ Image handling assessed
+✓ Date formats identified
+✓ URL patterns documented
+✓ Venue codes listed
+✓ Event type categories enumerated
+✓ Audience tags identified
+✓ Free/paid status logic explained
+✓ Pagination strategy confirmed
+✓ Production code examples provided
+✓ Test cases written
+✓ Error handling documented
+✓ Quick reference created
+✓ Troubleshooting guide included
+
+================================================================================
+CONCLUSION
+================================================================================
+
+The V&A What's On page is WELL-STRUCTURED and EASY TO SCRAPE:
+
+  - Clear, semantic HTML with no obfuscation
+  - Complete Schema.org implementation
+  - All data available server-side
+  - No pagination or lazy loading complexity
+  - Consistent structure across all 146 events
+  - Responsive images with good coverage
+  - Analytics data available for tracking
+
+Recommended approach: Simple Cheerio scraper with Schema.org selectors.
+Estimated complexity: LOW
+Estimated development time: <2 hours for production scraper
+
+================================================================================
+END OF ANALYSIS
+================================================================================

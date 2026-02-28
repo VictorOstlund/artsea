@@ -1,26 +1,109 @@
 @import "tailwindcss";
 
+/* ─── Gallery Color System ─── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #FFFFFF;
+  --bg-alt: #FAFAF8;
+  --bg-card: #FFFFFF;
+  --fg: #1A1A1A;
+  --fg-muted: #6B6B6B;
+  --fg-subtle: #999999;
+  --accent: #8B6F4E;
+  --accent-hover: #7A6044;
+  --border: #E8E6E1;
+  --border-subtle: #F0EDE8;
+  --shadow-color: rgba(0, 0, 0, 0.06);
+  --shadow-color-hover: rgba(0, 0, 0, 0.12);
+  --tag-bg: #F5F3EF;
+  --tag-fg: #5C5C5C;
+  --badge-bg: rgba(255, 255, 255, 0.88);
+  --input-bg: #FFFFFF;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* ─── Dark Mode (System Preference) ─── */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --bg: #1C1C1E;
+    --bg-alt: #232325;
+    --bg-card: #2C2C2E;
+    --fg: #F5F5F0;
+    --fg-muted: #A0A0A0;
+    --fg-subtle: #707070;
+    --accent: #C4A77D;
+    --accent-hover: #D4B78D;
+    --border: #3A3A3C;
+    --border-subtle: #2E2E30;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-color-hover: rgba(0, 0, 0, 0.5);
+    --tag-bg: #3A3A3C;
+    --tag-fg: #CCCCCC;
+    --badge-bg: rgba(0, 0, 0, 0.6);
+    --input-bg: #2C2C2E;
   }
 }
 
+/* ─── Dark Mode (Manual Toggle) ─── */
+:root[data-theme="dark"] {
+  --bg: #1C1C1E;
+  --bg-alt: #232325;
+  --bg-card: #2C2C2E;
+  --fg: #F5F5F0;
+  --fg-muted: #A0A0A0;
+  --fg-subtle: #707070;
+  --accent: #C4A77D;
+  --accent-hover: #D4B78D;
+  --border: #3A3A3C;
+  --border-subtle: #2E2E30;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-color-hover: rgba(0, 0, 0, 0.5);
+  --tag-bg: #3A3A3C;
+  --tag-fg: #CCCCCC;
+  --badge-bg: rgba(0, 0, 0, 0.6);
+  --input-bg: #2C2C2E;
+}
+
+/* ─── Tailwind Theme ─── */
+@theme inline {
+  --color-surface: var(--bg);
+  --color-surface-alt: var(--bg-alt);
+  --color-card: var(--bg-card);
+  --color-foreground: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-edge: var(--border);
+  --color-edge-subtle: var(--border-subtle);
+  --color-tag: var(--tag-bg);
+  --color-tag-text: var(--tag-fg);
+  --color-badge-overlay: var(--badge-bg);
+  --color-input: var(--input-bg);
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
+}
+
+/* ─── Base ─── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* ─── Card Shadows ─── */
+.card-shadow {
+  box-shadow: 0 1px 3px var(--shadow-color), 0 1px 2px var(--shadow-color);
+}
+
+.card-shadow-hover {
+  box-shadow: 0 8px 25px var(--shadow-color-hover), 0 4px 10px var(--shadow-color);
+}
+
+/* ─── Smooth Scrolling ─── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── Selection ─── */
+::selection {
+  background: var(--accent);
+  color: #FFFFFF;
 }

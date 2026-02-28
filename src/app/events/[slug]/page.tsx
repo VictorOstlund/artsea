@@ -82,13 +82,13 @@ export default async function EventPage({ params }: Props) {
   const typeLabel = EVENT_TYPE_LABELS[event.eventType] || event.eventType;
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-3xl">
       <Link
         href="/"
-        className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-6"
+        className="inline-flex items-center text-sm text-muted hover:text-foreground transition-colors mb-8"
       >
         <svg
-          className="mr-1 h-4 w-4"
+          className="mr-1.5 h-4 w-4"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -96,7 +96,7 @@ export default async function EventPage({ params }: Props) {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2}
+            strokeWidth={1.5}
             d="M15 19l-7-7 7-7"
           />
         </svg>
@@ -104,65 +104,67 @@ export default async function EventPage({ params }: Props) {
       </Link>
 
       {event.imageUrl && (
-        <div className="aspect-[16/9] overflow-hidden rounded-lg bg-gray-100 mb-6 relative">
+        <div className="aspect-[16/9] overflow-hidden rounded-2xl bg-surface-alt mb-8 relative">
           <Image
             src={event.imageUrl}
             alt={event.title}
             fill
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, 672px"
+            sizes="(max-width: 768px) 100vw, 768px"
             priority
           />
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-2 mb-4">
-        <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+      <div className="flex flex-wrap items-center gap-2 mb-5">
+        <span className="rounded-full bg-tag px-3 py-1 text-xs font-medium text-tag-text">
           {typeLabel}
         </span>
         {event.isSoldOut === true && (
-          <span className="rounded-full bg-gray-800 px-3 py-1 text-xs font-medium text-white">
+          <span className="rounded-full bg-foreground px-3 py-1 text-xs font-medium text-surface">
             Sold Out
           </span>
         )}
         {event.isFree === true && (
-          <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+          <span className="rounded-full bg-tag px-3 py-1 text-xs font-medium text-accent">
             Free
           </span>
         )}
       </div>
 
-      <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+      <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight">
         {event.title}
       </h1>
 
-      <div className="mt-4 space-y-2">
-        <p className="text-base text-gray-600">
+      <div className="mt-5 space-y-2">
+        <p className="text-base text-muted">
           {formatDateRange(event.startDate, event.endDate)}
         </p>
-        <p className="text-base text-gray-600">
+        <p className="text-base text-muted">
           <Link
             href={`/venues/${event.venueSlug}`}
-            className="font-medium text-gray-900 hover:underline"
+            className="font-medium text-foreground hover:text-accent transition-colors"
           >
             {event.venueName}
           </Link>
-          <span className="text-gray-400"> · {event.venueArea} London</span>
+          <span className="text-subtle"> · {event.venueArea} London</span>
         </p>
       </div>
 
       {event.description && (
-        <div className="mt-6 prose prose-gray max-w-none">
-          <p className="text-gray-700 leading-relaxed">{event.description}</p>
+        <div className="mt-8">
+          <p className="text-muted leading-relaxed text-[1.05rem]">
+            {event.description}
+          </p>
         </div>
       )}
 
-      <div className="mt-8">
+      <div className="mt-10">
         <a
           href={event.sourceUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition-colors"
+          className="inline-flex items-center rounded-xl bg-accent px-6 py-3 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
         >
           View on {event.venueName}
           <svg

@@ -37,10 +37,10 @@ export default function AboutPage() {
     <div className="mx-auto max-w-2xl">
       <Link
         href="/"
-        className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-6"
+        className="inline-flex items-center text-sm text-muted hover:text-foreground transition-colors mb-8"
       >
         <svg
-          className="mr-1 h-4 w-4"
+          className="mr-1.5 h-4 w-4"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -48,18 +48,18 @@ export default function AboutPage() {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2}
+            strokeWidth={1.5}
             d="M15 19l-7-7 7-7"
           />
         </svg>
         Back to events
       </Link>
 
-      <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+      <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
         About ArtSea
       </h1>
 
-      <div className="mt-6 space-y-4 text-gray-700 leading-relaxed">
+      <div className="mt-8 space-y-5 text-muted leading-relaxed text-[1.05rem]">
         <p>
           ArtSea is a free discovery platform for art and creative events
           happening across London. We automatically aggregate public event
@@ -72,17 +72,17 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <h2 className="mt-10 text-xl font-semibold text-gray-900">
+      <h2 className="mt-12 font-serif text-2xl font-semibold text-foreground">
         Venues we cover
       </h2>
-      <ul className="mt-4 space-y-2">
+      <ul className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
         {VENUES.map((venue) => (
           <li key={venue.url}>
             <a
               href={venue.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 hover:text-gray-900 hover:underline"
+              className="text-muted hover:text-accent transition-colors"
             >
               {venue.name}
             </a>
@@ -90,21 +90,25 @@ export default function AboutPage() {
         ))}
       </ul>
 
-      <h2 className="mt-10 text-xl font-semibold text-gray-900">Attribution</h2>
-      <p className="mt-4 text-gray-700 leading-relaxed">
-        Event information is sourced from publicly available listings on venue
-        websites and third-party listing platforms including{" "}
-        <a
-          href="https://www.timeout.com/london"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-gray-900 hover:underline"
-        >
-          TimeOut London
-        </a>
-        . Every listing links back to its original source. ArtSea is not
-        affiliated with any of the venues or platforms listed.
-      </p>
+      <div className="mt-12 border-t border-edge pt-8">
+        <h2 className="font-serif text-2xl font-semibold text-foreground">
+          Attribution
+        </h2>
+        <p className="mt-4 text-muted leading-relaxed">
+          Event information is sourced from publicly available listings on venue
+          websites and third-party listing platforms including{" "}
+          <a
+            href="https://www.timeout.com/london"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent hover:text-accent-hover transition-colors"
+          >
+            TimeOut London
+          </a>
+          . Every listing links back to its original source. ArtSea is not
+          affiliated with any of the venues or platforms listed.
+        </p>
+      </div>
     </div>
   );
 }
