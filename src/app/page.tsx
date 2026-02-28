@@ -175,25 +175,7 @@ export default async function Home({ searchParams }: Props) {
         <EmptyState />
       ) : (
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {/* Featured first event — spans 2 cols on large screens */}
-          {filteredEvents.length > 0 && (
-            <div className="sm:col-span-2 lg:col-span-2">
-              <EventCard
-                key={filteredEvents[0].id}
-                title={filteredEvents[0].title}
-                venueName={filteredEvents[0].venueName}
-                startDate={filteredEvents[0].startDate}
-                endDate={filteredEvents[0].endDate}
-                eventType={filteredEvents[0].eventType}
-                imageUrl={filteredEvents[0].imageUrl}
-                slug={filteredEvents[0].slug}
-                sourceUrl={filteredEvents[0].sourceUrl}
-                isFree={filteredEvents[0].isFree}
-                isSoldOut={filteredEvents[0].isSoldOut}
-              />
-            </div>
-          )}
-          {filteredEvents.slice(1).map((event) => (
+          {filteredEvents.map((event) => (
             <EventCard
               key={event.id}
               title={event.title}

@@ -91,7 +91,7 @@ export function EventCard({
       className={`group block overflow-hidden rounded-sm bg-card card-shadow card-accent-top transition-all duration-300 hover:card-shadow-hover ${soldOut ? "opacity-60 grayscale-[30%]" : ""}`}
     >
       {/* Image */}
-      <div className="aspect-[3/2] bg-surface-alt relative overflow-hidden card-img-overlay">
+      <div className="aspect-[4/3] bg-surface-alt relative overflow-hidden card-img-overlay">
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -101,20 +101,13 @@ export function EventCard({
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-subtle">
-            <svg
-              className="h-12 w-12"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"
-              />
-            </svg>
+          <div className="flex h-full w-full flex-col items-center justify-center bg-accent/15 px-6 text-center">
+            <span className="text-[10px] font-medium tracking-[0.12em] uppercase text-accent/70">
+              {typeLabel}
+            </span>
+            <span className="mt-2 font-serif text-base font-semibold text-foreground/80 leading-snug line-clamp-2">
+              {venueName}
+            </span>
           </div>
         )}
         {/* Status badges */}
